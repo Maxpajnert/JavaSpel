@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body class="backgroundMain"; style="height: 550px; text-align: center;">
+    <canvas class="transparent" style=" padding-top:100px;" id="c" width="500" height="500"></canvas>
+<script src="simple.js">
+
+/* 
+    to do list:
+    Söka runt på klasser i java
+    hitta bilder
+    få en stor rektangel att loopa när den "åker" fram över skärmen
+    få fram hål genom "hole"
+    generera fram hål i varje pelare
+
+    fixa så att "min gubbe" fungerar genom både "wasd" knapparna och påverkas av gravitation
+
+    ifall gubben och pelaren träffas så är det game over
+*/
+
+
+
+    var constantUp = 2;
+    var accUp = 2;
+
+    
+    var c = document.getElementById("c");
+    var context = c.getContext("2d");
+
+
+    const bird = document.createElement("img");
+    bird.src = "img/bird.png";
+    
+    const background = document.createElement("img");
+    background.src = "img/background.jpg";
+
+    let music = new Audio("Music/Lofi.mp3");//musik
+
+    birdX = 8;
+    birdY = 200;
+
+    //delta Y, som kommer ändras (vertikala farten)
+    birdDY = 0;
+    //gravitations konstanten som kommer göra så varje gång intervallet körs, kommer positionen subtraheras med detta
+    var gravity = 0.6;
+
+    let points = 0;
+
+    //Ger ungefär 30 fps
+    interval = 33;
+
+    let canvasSize = 500;
+    let pipeX = 500;
+
+    let bullets = [];
+
+
+    var cooldown = 20;
+    let cooldowncnt = 0;
+    
+    let jump = false;
+    let k = 1;
+
+    let pipeGap = 200;
+    let pipeWidth = 34;
+    let topPipeBottomY = 34;
+
+    interval = 33;
+
+    setInterval(() => {
+
+        music.play(); //Spelar upp musik
+
+        context.fillRect(0, 0, canvasSize, canvasSize);
+
+        birdY -= birdDY -= gravity;
+
+                
+        context.drawImage(background, 0, 0, 1000, 500);
+        context.drawImage(bird, birdX, birdY, 160, 100);
+
+        if(birdY > 410) //Stoppet, så man inte åger längre ner än canvasen är
+        {
+
+            birdDY = 0;
+            k = 0;
+            gravity = 0;
+        }
+
+        clearScreen(); 
+        
+
+        if(keyboard.space && cooldowncnt==0)
+        {
+                cooldowncnt+=2;
+                k=1;
+                jump=true;
+                gravity = 0.6;
+        }
+        if(jump) {
+                birdDY += 11;
+                k = 0;
+        }
+        if(k == 0) {
+            jump = false;
+        }
+        if(cooldowncnt>0)
+        {
+            cooldowncnt+=2;
+        }
+        if(cooldowncnt==cooldown)
+        {
+            cooldowncnt=0;
+        }
+
+
+        /*
+        if(keyboard.e) {
+            bullet.push([birdX,birdY]);
+        }
+
+        
+        for(let i =0;i<bullets.length; i++){
+
+            context.fillRect(bullets[i][0], bullets[i][1], 10, 10, "black");
+                bullets[i][0] += 10;
+        }
+        */
+
+
+        context.fillStyle = "white" ;
+        pipeX -= 6;
+        pipeX < -pipeWidth && ((pipeX = canvasSize), (topPipeBottomY = pipeGap * Math.random()));
+
+        context.fillRect(pipeX, 0, pipeWidth, topPipeBottomY); //Målar ut övre pipe 
+        context.fillRect(pipeX, topPipeBottomY + pipeGap, pipeWidth, canvasSize); //Målar ut undre pipe
+
+        //if top pipe hit hitbox you die
+        if(birdX + 90 == pipeX && birdY < topPipeBottomY) {
+            window.location.href="Death.html"
+        }
+
+        //if bottom pipe hit bird hitbox you die
+        if(birdX + 90 == pipeX && birdY > topPipeBottomY + pipeGap || birdX + 90 == pipeX && birdY + 100 > topPipeBottomY + pipeGap) {
+            window.location.href="Death.html"
+        }
+
+        //point system, -40 finns för att jämna ut med intervallets update
+        if(birdX -40 > pipeX) {
+            points++
+        }
+
+        text(755,80,50, points, "yellow");
+
+    }, interval);
+
+
+/*
+function update()
+{
+
+    clearScreen();
+
+    var floor;
+
+    circle(circleX, circleY, 20, "black");
+
+    if(circleY < totalHeight) {
+
+        constantDown += accDown;
+
+        circleY += constantDown;
+    }
+
+    if(onclick=keyboard.space){
+  
+        circleY -= 18 ; 
+    }
+*/
+
+
+    /*
+    if(keyboard.space) {
+
+        tru = true;
+
+    }
+    if (tru) {
+        
+        constantUp += accUp;
+        circleY -= constantUp;
+
+        if(constantUp < 0) {
+            tru = false;
+        }
+    }
+    
+
+
+
+}
+*/
+
+
+</script>
+</body>
+</html>

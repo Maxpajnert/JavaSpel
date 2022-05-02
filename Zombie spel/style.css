@@ -1,0 +1,28 @@
+.gameover {
+    height: 600px;
+    width: 600px;
+    padding-left: 450px;
+    padding-top: 100px;
+}
+.start {
+    height: 300px;
+    height: 80px;
+    padding-left: 250px;
+    padding-top: 300px;
+}
+
+.background {
+    background-image: url("img/BackgroundG.gif");
+}
+
+.backgroundMain {
+    background-image: url("img/BackgroundMain.gif");
+    
+}
+.transparent {
+    background: transparent;
+}
+body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
